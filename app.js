@@ -380,6 +380,8 @@ function labelType(type){
 function labelTime(ev){
   return `${ev.period}°T ${ev.minute}'`;
 }
+
+/* ✅ Assist: solo (Nome) */
 function compactMainText(ev){
   if (ev.type === "SOSTITUZIONE"){
     const esce = ev.p1 || "";
@@ -388,7 +390,7 @@ function compactMainText(ev){
   }
   if (ev.type === "GOL_FATTO"){
     const base = ev.p1 || "";
-    const a = ev.assist ? ` (Assist: ${ev.assist})` : "";
+    const a = ev.assist ? ` (${ev.assist})` : "";
     return `${base}${a}`.trim();
   }
   if (ev.type === "GOL_SUBITO") return "";
@@ -691,7 +693,6 @@ async function onCloseMatch(){
   setPage("Referto Export","view-export");
   refreshExportUI();
 
-  // upload automatico
   triggerAutoUpload(false);
 }
 
@@ -873,7 +874,10 @@ function buildWhatsAppText(match){
     const scoreLine = `${alto} vs ${opp}: ${gf} - ${gs}`;
     const scorers = match.events
       .filter(e=>e.type==="GOL_FATTO" && e.p1)
-      .map(e=>e.p1);
+      .map(e=>{
+        // qui non metto assist per whatsapp (come avevi prima)
+        return e.p1;
+      });
     const scorersLine = scorers.length ? scorers.join(", ") : "";
     return [scoreLine, scorersLine, voteLine].filter(Boolean).join("\n");
   }
@@ -931,10 +935,7 @@ async function onCopyWhatsApp(){
   }
 }
 
-/**
- * PDF locale “più pro”: logo + header + box dati + risultati + tabella eventi pulita.
- * (Senza duplicazioni inutili.)
- */
+/* ✅ PDF: assist solo (Nome) */
 function onDownloadPDF(){
   const sess = getCurrentSession();
   const m = sess?.currentMatch;
@@ -972,9 +973,13 @@ function buildPrintableHTML(m){
     const t = `${e.period}°T`;
     const min = `${e.minute}'`;
     const type = labelType(e.type);
+
     let det = "";
     if (e.type === "SOSTITUZIONE") det = `↓ ${e.p1 || ""}  |  ↑ ${e.p2 || ""}`;
-    else if (e.type === "GOL_FATTO"){ det = (e.p1 || ""); if (e.assist) det += ` (Assist: ${e.assist})`; }
+    else if (e.type === "GOL_FATTO"){
+      det = (e.p1 || "");
+      if (e.assist) det += ` (${e.assist})`;
+    }
     else if (e.type === "GOL_SUBITO") det = "";
     else det = (e.p1 || "");
 
@@ -1028,7 +1033,6 @@ function buildPrintableHTML(m){
     h1{margin:0;font-size:18px;letter-spacing:.02em}
     .sub{margin-top:6px;color:#444;font-size:12px}
     .line{height:1px;background:#ddd;margin:12px 0}
-    .grid2{display:grid;grid-template-columns: 1fr 1fr;gap:10px}
     .box{border:1px solid #ddd;border-radius:12px;padding:10px}
     .boxTitle{font-size:11px;color:#444;text-transform:uppercase;letter-spacing:.08em;font-weight:bold}
     .bigScore{font-size:26px;font-weight:bold;margin-top:6px}
@@ -1242,7 +1246,6 @@ function init(){
   fillSelect($("teamSelect"), TEAMS);
   fillSelect($("setTeam"), TEAMS);
 
-  // remember password
   const remember = localStorage.getItem(LS_REMEMBER) === "1";
   $("rememberPw").checked = remember;
   if (remember){
