@@ -1118,9 +1118,9 @@ async function uploadMatchToDrive(force=false){
   const m = sess?.currentMatch;
   if (!m) return;
 
-  if (!m.archive) m.archive = { status:"idle", fileName:"", error:"" };
+  if (!m.archive) m.archive = {status:"idle",fileName:"",error:""};
 
-  if (!force && (m.archive.status==="done" || m.archive.status==="uploading"))
+  if(!force && (m.archive.status==="done" || m.archive.status==="uploading"))
     return;
 
   m.archive.status="uploading";
@@ -1138,41 +1138,31 @@ async function uploadMatchToDrive(force=false){
       `${m.date}_${m.time.replace(":","")}_${m.team}_vs_${m.opponent}.pdf`
       .replaceAll(" ","_");
 
-    const payload={
-      token: ARCHIVE_TOKEN,
-      html: html,
-      fileName: fileName
-    };
-
     const resp = await fetch(ARCHIVE_ENDPOINT,{
       method:"POST",
       headers:{
-        "Content-Type":"text/plain"
+        "Content-Type":"text/plain;charset=UTF-8"
       },
-      body: JSON.stringify(payload)
+      body:JSON.stringify({
+        token:ARCHIVE_TOKEN,
+        html:html,
+        fileName:fileName
+      })
     });
 
     const text = await resp.text();
-
-    let out;
-    try{
-      out = JSON.parse(text);
-    }catch{
-      throw new Error("Risposta non valida: " + text);
-    }
+    const out = JSON.parse(text);
 
     if(out.ok){
       m.archive.status="done";
-      m.archive.fileName=out.fileName || fileName;
+      m.archive.fileName=fileName;
     }else{
-      throw new Error(out.error || "Errore upload");
+      throw new Error(out.error);
     }
 
   }catch(err){
-
     m.archive.status="error";
-    m.archive.error=err.message;
-
+    m.archive.error=String(err);
   }
 
   saveState();
