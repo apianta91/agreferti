@@ -24,12 +24,14 @@ body{
   text-rendering: optimizeLegibility;
 }
 
+/* background */
 .bg-login{ background:#f4f6fb; color:var(--text); }
 .bg-royal{ background:linear-gradient(180deg,var(--royal),var(--royal2)); color:var(--textOnBlue); }
 
+/* ✅ notch safe area */
 .topbar{
   position:sticky; top:0; z-index:10;
-  padding: 12px 14px;
+  padding: calc(12px + env(safe-area-inset-top)) 14px 12px;
   backdrop-filter: blur(8px);
 }
 .bg-royal .topbar{ background:rgba(0,0,0,.12); border-bottom:1px solid rgba(255,255,255,.10); }
@@ -47,8 +49,9 @@ body{
   font-size: 13px;
   text-transform: uppercase;
   text-align:center;
+  flex: 1;
 }
-.topSpacer{ flex:1; }
+.topSpacer{ display:none; }
 
 .wrap{
   max-width: 560px;
@@ -74,6 +77,7 @@ body{
   border-radius: var(--radius);
   padding: 16px;
   box-shadow: var(--shadow);
+  text-align:center; /* ✅ tutto centrato */
 }
 .bg-royal .card{
   background:linear-gradient(180deg,var(--card),var(--card2));
@@ -85,9 +89,7 @@ body{
 }
 .cardLogin{ padding:18px; }
 
-.center{ text-align:center; }
-.centerRow{ justify-content:center; }
-
+/* ✅ label centrate */
 .label{
   display:block;
   margin: 10px 0 6px;
@@ -95,18 +97,31 @@ body{
   font-weight: 900;
   letter-spacing:.10em;
   text-transform: uppercase;
-  text-align:left;
+  text-align:center;
 }
 
+/* ✅ input centrati + fix iOS date/time */
 .input{
   width:100%;
+  max-width:100%;
   border-radius: 14px;
   padding: 12px 12px;
   font-size: 16px;
   border: 1px solid rgba(0,0,0,.10);
   outline:none;
   display:block;
+  text-align:center; /* ✅ testo centrato */
 }
+
+input[type="date"].input,
+input[type="time"].input{
+  width:100%;
+  max-width:100%;
+  min-width:0;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
 .bg-royal .input{
   background: rgba(255,255,255,.10);
   border:1px solid rgba(255,255,255,.14);
@@ -115,9 +130,13 @@ body{
 .bg-royal .input::placeholder{ color: rgba(234,241,255,.60); }
 .bg-login .input{ background:white; }
 
-textarea.input{ resize: vertical; }
+/* textarea: meglio leggibile a sinistra (ma box centrata) */
+textarea.input{
+  resize: vertical;
+  text-align:left;
+}
 
-.row{ margin-top:10px; display:flex; align-items:center; gap:10px; }
+.row{ margin-top:10px; display:flex; align-items:center; gap:10px; justify-content:center; }
 
 .btn{
   border:0;
@@ -163,9 +182,7 @@ textarea.input{ resize: vertical; }
   .grid2{ grid-template-columns: 1fr; }
 }
 
-.seg{
-  display:flex; gap:10px;
-}
+.seg{ display:flex; gap:10px; }
 .segBtn{
   flex:1;
   padding: 12px;
@@ -262,6 +279,7 @@ textarea.input{ resize: vertical; }
   font-size: 12px;
   font-weight: 900;
   opacity: .86;
+  text-align:center;
 }
 
 .eventsGrid{
@@ -299,23 +317,23 @@ textarea.input{ resize: vertical; }
 
 .eventsList{ display:flex; flex-direction:column; gap:8px; }
 
-/* ✅ EVENT ROW più compatta */
+/* ✅ eventi centrati */
 .eventRow{
   display:grid;
-  grid-template-columns: 118px 8px 1fr 92px;   /* prima era più larga */
+  grid-template-columns: 118px 8px 1fr 92px;
   gap:8px;
   align-items:center;
-  padding: 9px 9px;                           /* meno padding */
+  padding: 9px 9px;
   border-radius: 16px;
   background: rgba(0,0,0,.10);
   border:1px solid rgba(255,255,255,.10);
-  text-align:left;
+  text-align:center; /* ✅ */
 }
 @media (max-width:420px){
   .eventRow{ grid-template-columns: 110px 6px 1fr 84px; }
 }
 
-.evLeft{ display:flex; flex-direction:column; gap:5px; }
+.evLeft{ display:flex; flex-direction:column; gap:5px; align-items:center; }
 .evPillTime{
   width: fit-content;
   padding: 5px 9px;
@@ -349,6 +367,7 @@ textarea.input{ resize: vertical; }
   height: 42px;
   border-radius: 999px;
   background: rgba(255,255,255,.16);
+  justify-self:center;
 }
 
 .evMain{
@@ -356,12 +375,13 @@ textarea.input{ resize: vertical; }
   letter-spacing:.02em;
   font-size: 12px;
   opacity:.98;
+  text-align:center;
 }
 
 .evActions{
   display:flex;
   gap:8px;
-  justify-content:flex-end;
+  justify-content:center; /* ✅ */
   flex-wrap:wrap;
 }
 .actionLink{
@@ -408,12 +428,11 @@ textarea.input{ resize: vertical; }
 }
 .actionLeft{ flex: 0 0 38%; }
 .actionRight{ flex: 1; }
-
 @media (max-width:420px){
   .actionLeft{ flex: 0 0 42%; }
 }
 
-/* Modal */
+/* Modal centrata */
 .modalOverlay{
   position:fixed; inset:0;
   background: rgba(0,0,0,.45);
@@ -431,7 +450,7 @@ textarea.input{ resize: vertical; }
   background: #0B2FA6;
   border:1px solid rgba(255,255,255,.16);
   color: var(--textOnBlue);
-  text-align:left;
+  text-align:center; /* ✅ */
 }
 .modalHead{
   display:flex; align-items:center; justify-content:space-between; gap:10px;
@@ -440,6 +459,8 @@ textarea.input{ resize: vertical; }
   font-weight: 900;
   letter-spacing:.10em;
   text-transform: uppercase;
+  flex: 1;
+  text-align:center;
 }
 .modalX{
   border:0; background: rgba(255,255,255,.12);
@@ -448,7 +469,7 @@ textarea.input{ resize: vertical; }
   padding: 8px 10px;
   cursor:pointer;
 }
-.modalMsg{ margin-top:10px; opacity:.92; font-weight:900; }
+.modalMsg{ margin-top:10px; opacity:.92; font-weight:900; text-align:center; }
 .modalForm{ margin-top:10px; }
 .modalErr{
   margin-top:10px;
@@ -458,6 +479,7 @@ textarea.input{ resize: vertical; }
   background: rgba(255,59,48,.14);
   font-weight: 900;
   letter-spacing:.03em;
+  text-align:center;
 }
 .modalBtns{
   display:grid;
