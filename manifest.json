@@ -1,0 +1,12 @@
+{
+  "name": "AG Referti",
+  "short_name": "AG Referti",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#0B2FA6",
+  "theme_color": "#0B2FA6",
+  "icons": [
+    { "src": "logo.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "logo.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
