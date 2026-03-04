@@ -23,8 +23,8 @@ const DEFAULTS = {
 // ======================
 // DRIVE UPLOAD (Apps Script)
 // ======================
-const ARCHIVE_ENDPOINT = "https://script.google.com/macros/s/AKfycbw519NnfjcbHT3Nbz4u4nC16t52-UjRlVHX2qLPjBsRzSLPwA9jwzMzXHpNLBaVqnyXlA/exec";
-const ARCHIVE_TOKEN = "AGREFERTI_7vQ2pL9nX4mR8sT1yK6hJ3cD5wZ0aB";
+const ARCHIVE_ENDPOINT = "https://script.google.com/macros/s/AKfycbyVRecNmnP8wc5TxWpGlrrMQaqjN6z8LFXaBvSyYlajG7qJW7xwaEm0Uog66RQAvfHPbA/exec";
+const ARCHIVE_TOKEN = "AGUP_9fQ3!vZ7#kL2@pX8$hN6%rT1";
 
 // ======================
 // STORAGE
@@ -1118,45 +1118,45 @@ async function uploadMatchToDrive(force=false){
   if (!m) return;
 
   if (!m.archive) m.archive = { status:"idle", fileName:"", error:"" };
-  if (!force && (m.archive.status === "done" || m.archive.status === "uploading")) return;
+
+  if (!force && (m.archive.status==="done" || m.archive.status==="uploading"))
+    return;
 
   m.archive.status = "uploading";
   m.archive.error = "";
   m.archive.fileName = "";
+
   saveState();
   refreshExportUI();
 
   const url = `${ARCHIVE_ENDPOINT}?token=${encodeURIComponent(ARCHIVE_TOKEN)}`;
 
   try {
-    await fetch(url, {
-      method: "POST",
-      mode: "no-cors",
-      headers: { "Content-Type": "text/plain;charset=UTF-8" },
-      body: JSON.stringify({ match: m })
+    const resp = await fetch(url,{
+      method:"POST",
+      headers:{
+        "Content-Type":"text/plain;charset=UTF-8"
+      },
+      body: JSON.stringify({match:m})
     });
 
-    setTimeout(() => {
-      const sess2 = getCurrentSession();
-      const m2 = sess2?.currentMatch;
-      if (!m2) return;
+    const out = await resp.json();
 
-      if (m2.archive?.status === "uploading") {
-        m2.archive.status = "done";
-        m2.archive.error = "";
-        m2.archive.fileName = `Referto - ${m2.date} - ${m2.team} vs ${m2.opponent}.pdf (controlla Drive)`;
-        saveState();
-        refreshExportUI();
-        showBanner("DRIVE OK");
-      }
-    }, 1200);
+    if(out.status==="success"){
+      m.archive.status="done";
+      m.archive.fileName=out.name || "Referto salvato";
+    }else{
+      m.archive.status="error";
+      m.archive.error=out.message || "Errore upload";
+    }
 
-  } catch (err) {
-    m.archive.status = "error";
-    m.archive.error = String(err?.message || err);
-    saveState();
-    refreshExportUI();
+  } catch(err){
+    m.archive.status="error";
+    m.archive.error=String(err?.message || err);
   }
+
+  saveState();
+  refreshExportUI();
 }
 
 function triggerAutoUpload(force){
