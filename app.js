@@ -23,7 +23,7 @@ const DEFAULTS = {
 // ======================
 // DRIVE UPLOAD (Apps Script)
 // ======================
-const ARCHIVE_ENDPOINT = "https://script.google.com/macros/s/AKfycbyVRecNmnP8wc5TxWpGlrrMQaqjN6z8LFXaBvSyYlajG7qJW7xwaEm0Uog66RQAvfHPbA/exec";
+const ARCHIVE_ENDPOINT ="https://script.google.com/macros/s/AKfycbzyWft3ATB5WXoewsWW51vD-TBv5pwg8fYO4dk5l3WzYCAm-heWF1d3c1XTM9DDr1iz-Q/exec";
 const ARCHIVE_TOKEN = "AGUP_9fQ3!vZ7#kL2@pX8$hN6%rT1";
 
 // ======================
