@@ -4,6 +4,19 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <title>AG Referti</title>
+
+  <!-- iPhone Home Screen icon -->
+  <link rel="apple-touch-icon" href="logo.png" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+  <!-- Android / PWA -->
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#0B2FA6" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="logo.png" />
+
   <link rel="stylesheet" href="style.css" />
 </head>
 <body class="bg-login">
@@ -22,16 +35,14 @@
   <main class="wrap">
     <!-- LOGIN -->
     <section id="view-login" class="view">
-      <div class="card cardLogin">
-        <h1 class="h1">Login</h1>
-
+      <div class="card cardLogin center">
         <label class="label">Squadra</label>
         <select id="teamSelect" class="input"></select>
 
         <label class="label">Password</label>
         <input id="passwordInput" class="input" type="password" inputmode="text" autocomplete="off" autocapitalize="off" spellcheck="false" />
 
-        <div class="row">
+        <div class="row centerRow">
           <label class="check">
             <input id="rememberPw" type="checkbox" />
             <span>Ricorda password</span>
@@ -40,19 +51,13 @@
 
         <div class="spacer"></div>
 
-        <button id="btnLogin" class="btn primary big">🔐 Apri Partita</button>
+        <button id="btnLogin" class="btn primary big full">🔐 Apri Partita</button>
       </div>
     </section>
 
     <!-- SETTINGS -->
     <section id="view-settings" class="view hidden">
-      <div class="card">
-        <div class="rowBetween">
-          <button id="btnBackSettings" class="btn ghost">← Torna a Vista Precedente</button>
-        </div>
-
-        <h1 class="h1">Impostazioni del Match</h1>
-
+      <div class="card center">
         <label class="label">Squadra</label>
         <select id="setTeam" class="input"></select>
 
@@ -66,18 +71,18 @@
         </div>
 
         <div class="grid2">
-          <div>
+          <div class="col">
             <label class="label">Data</label>
             <input id="setDate" class="input" type="date" />
           </div>
-          <div>
+          <div class="col">
             <label class="label">Ora</label>
             <input id="setTime" class="input" type="time" />
           </div>
         </div>
 
         <div class="grid2">
-          <div>
+          <div class="col">
             <label class="label">Modalità di Gioco</label>
             <select id="setMode" class="input">
               <option>5v5</option>
@@ -86,7 +91,7 @@
               <option>11v11</option>
             </select>
           </div>
-          <div>
+          <div class="col">
             <label class="label">Numero Tempi</label>
             <select id="setPeriods" class="input">
               <option value="2">2</option>
@@ -113,20 +118,16 @@
 
         <div class="spacer"></div>
 
-        <button id="btnOpenMatch" class="btn primary big">📝 Apri Referto</button>
+        <div class="actionRow">
+          <button id="btnBackSettings" class="btn ghost big actionLeft">← BACK</button>
+          <button id="btnOpenMatch" class="btn primary big actionRight">📝 Apri Referto</button>
+        </div>
       </div>
     </section>
 
     <!-- LIVE -->
     <section id="view-live" class="view hidden">
-      <div class="card">
-        <div class="rowBetween">
-          <button id="btnBackLive" class="btn ghost">← Torna a Vista Precedente</button>
-        </div>
-
-        <h1 class="h1">Referto Live</h1>
-
-        <!-- Scoreboard -->
+      <div class="card center">
         <div class="scoreboard">
           <div class="sbTeam">
             <div id="teamHome" class="sbName">HOME</div>
@@ -141,23 +142,20 @@
 
         <div id="metaLine" class="meta"></div>
 
-        <!-- Period buttons -->
         <div id="periodButtons" class="periodRow"></div>
 
-        <!-- Timer -->
         <div class="timerWrap">
           <div id="timerBox" class="timer idle">00:00</div>
           <div id="timerHint" class="hint"></div>
         </div>
 
         <div class="grid2">
-          <button id="btnPlay" class="btn play big">▶ PLAY</button>
-          <button id="btnReset" class="btn reset big">⟲ RESET</button>
+          <button id="btnPlay" class="btn play big full">▶ PLAY</button>
+          <button id="btnReset" class="btn reset big full">⟲ RESET</button>
         </div>
 
         <div class="divider"></div>
 
-        <!-- Event buttons (big, 2 rows) -->
         <div class="eventsGrid">
           <button class="eventBtn evBig" data-ev="GOL_FATTO" type="button">
             <div class="evIcon">⚽</div><div class="evTxt">GOL FATTO</div>
@@ -186,26 +184,21 @@
 
         <div class="divider"></div>
 
-        <!-- Events list -->
-        <h2 class="h2">Eventi</h2>
+        <div class="h2">Eventi</div>
         <div id="eventsList" class="eventsList"></div>
 
         <div class="spacer"></div>
 
-        <button id="btnGoClose" class="btn danger big">✅ Vai a Chiusura Referto</button>
+        <div class="actionRow">
+          <button id="btnBackLive" class="btn ghost big actionLeft">← BACK</button>
+          <button id="btnGoClose" class="btn danger big actionRight">✅ Chiusura Referto</button>
+        </div>
       </div>
     </section>
 
     <!-- CLOSE -->
     <section id="view-close" class="view hidden">
-      <div class="card">
-        <div class="rowBetween">
-          <button id="btnBackClose" class="btn ghost">← Torna a Vista Precedente</button>
-        </div>
-
-        <h1 class="h1">Referto Chiusura</h1>
-
-        <!-- Scoreboard -->
+      <div class="card center">
         <div class="scoreboard">
           <div class="sbTeam">
             <div id="teamHomeClose" class="sbName">HOME</div>
@@ -228,27 +221,23 @@
 
         <div class="spacer"></div>
 
-        <button id="btnCloseMatch" class="btn danger big">🚨 Chiudi Referto</button>
+        <div class="actionRow">
+          <button id="btnBackClose" class="btn ghost big actionLeft">← BACK</button>
+          <button id="btnCloseMatch" class="btn danger big actionRight">🚨 Chiudi Referto</button>
+        </div>
       </div>
     </section>
 
     <!-- EXPORT -->
     <section id="view-export" class="view hidden">
-      <div class="card">
-        <div class="rowBetween">
-          <button id="btnBackExport" class="btn ghost">← Torna a Vista Precedente</button>
-        </div>
-
-        <h1 class="h1">Referto Export</h1>
-
+      <div class="card center">
         <div class="exportActions">
-          <button id="btnDownloadPDF" class="btn primary big">📄 Esporta PDF</button>
-          <button id="btnCopyWhatsApp" class="btn primary big">📲 Copia WhatsApp</button>
+          <button id="btnDownloadPDF" class="btn primary big full">📄 Esporta PDF</button>
+          <button id="btnCopyWhatsApp" class="btn primary big full">📲 Copia WhatsApp</button>
         </div>
 
         <div class="divider"></div>
 
-        <!-- Drive status (resta, bottone tolto) -->
         <div class="driveBox">
           <div id="driveLine" class="driveLine">Caricamento su GoogleDrive – In attesa…</div>
           <div id="archiveStatus" class="driveSub"></div>
@@ -259,9 +248,11 @@
 
         <div class="spacer"></div>
 
-        <button id="btnRestart" class="btn ghost big full">↩ Ricomincia</button>
+        <div class="actionRow">
+          <button id="btnBackExport" class="btn ghost big actionLeft">← BACK</button>
+          <button id="btnRestart" class="btn ghost big actionRight">↩ Ricomincia</button>
+        </div>
 
-        <!-- logo solo qui + login (come volevi) -->
         <div class="exportLogoWrap">
           <img class="exportLogo" src="logo.png" alt="AG" />
         </div>
@@ -281,11 +272,11 @@
 
       <div id="modalForm" class="modalForm hidden">
         <div class="grid2">
-          <div>
+          <div class="col">
             <label class="label">Tempo</label>
             <input id="mPeriod" class="input" type="number" min="1" />
           </div>
-          <div>
+          <div class="col">
             <label class="label">Minuto</label>
             <input id="mMin" class="input" type="number" min="1" />
           </div>
