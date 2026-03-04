@@ -1,0 +1,9 @@
+{
+  "name": "AG Referti",
+  "short_name": "Referti",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#0b3d91",
+  "theme_color": "#0b3d91",
+  "icons": []
+}

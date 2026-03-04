@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>AG Referti</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="bg-login">
+  <!-- Top bar -->
+  <header class="topbar">
+    <div class="topbarInner">
+      <img id="clubLogo" class="topLogo" src="logo.png" alt="AG" />
+      <div id="pageTitle" class="topTitle">LOGIN</div>
+      <div class="topSpacer"></div>
+    </div>
+  </header>
+
+  <!-- Banner -->
+  <div id="banner" class="banner hidden"></div>
+
+  <main class="wrap">
+    <!-- LOGIN -->
+    <section id="view-login" class="view">
+      <div class="card cardLogin">
+        <h1 class="h1">Login</h1>
+
+        <label class="label">Squadra</label>
+        <select id="teamSelect" class="input"></select>
+
+        <label class="label">Password</label>
+        <input id="passwordInput" class="input" type="password" inputmode="text" autocomplete="off" autocapitalize="off" spellcheck="false" />
+
+        <div class="row">
+          <label class="check">
+            <input id="rememberPw" type="checkbox" />
+            <span>Ricorda password</span>
+          </label>
+        </div>
+
+        <div class="spacer"></div>
+
+        <button id="btnLogin" class="btn primary big">🔐 Apri Partita</button>
+      </div>
+    </section>
+
+    <!-- SETTINGS -->
+    <section id="view-settings" class="view hidden">
+      <div class="card">
+        <div class="rowBetween">
+          <button id="btnBackSettings" class="btn ghost">← Torna a Vista Precedente</button>
+        </div>
+
+        <h1 class="h1">Impostazioni del Match</h1>
+
+        <label class="label">Squadra</label>
+        <select id="setTeam" class="input"></select>
+
+        <label class="label">Avversario</label>
+        <input id="setOpponent" class="input" type="text" placeholder="Es. Real Madrid" />
+
+        <label class="label">Casa / Trasferta</label>
+        <div class="seg">
+          <button id="venueCasa" class="segBtn active" type="button">Casa</button>
+          <button id="venueTrasferta" class="segBtn" type="button">Trasferta</button>
+        </div>
+
+        <div class="grid2">
+          <div>
+            <label class="label">Data</label>
+            <input id="setDate" class="input" type="date" />
+          </div>
+          <div>
+            <label class="label">Ora</label>
+            <input id="setTime" class="input" type="time" />
+          </div>
+        </div>
+
+        <div class="grid2">
+          <div>
+            <label class="label">Modalità di Gioco</label>
+            <select id="setMode" class="input">
+              <option>5v5</option>
+              <option>7v7</option>
+              <option>9v9</option>
+              <option>11v11</option>
+            </select>
+          </div>
+          <div>
+            <label class="label">Numero Tempi</label>
+            <select id="setPeriods" class="input">
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+            </select>
+          </div>
+        </div>
+
+        <label class="label">Durata Tempi (min)</label>
+        <select id="setPeriodMin" class="input">
+          <option value="15">15</option>
+          <option value="20">20</option>
+          <option value="35">35</option>
+          <option value="40">40</option>
+          <option value="45">45</option>
+          <option value="custom">Custom</option>
+        </select>
+
+        <div id="customMinWrap" class="hidden">
+          <label class="label">Inserisci la durata dei tempi</label>
+          <input id="setPeriodCustom" class="input" type="number" min="1" placeholder="Es. 12" />
+        </div>
+
+        <div class="spacer"></div>
+
+        <button id="btnOpenMatch" class="btn primary big">📝 Apri Referto</button>
+      </div>
+    </section>
+
+    <!-- LIVE -->
+    <section id="view-live" class="view hidden">
+      <div class="card">
+        <div class="rowBetween">
+          <button id="btnBackLive" class="btn ghost">← Torna a Vista Precedente</button>
+        </div>
+
+        <h1 class="h1">Referto Live</h1>
+
+        <!-- Scoreboard -->
+        <div class="scoreboard">
+          <div class="sbTeam">
+            <div id="teamHome" class="sbName">HOME</div>
+            <div id="scoreHome" class="sbScore">0</div>
+          </div>
+          <div class="sbMid">—</div>
+          <div class="sbTeam">
+            <div id="teamAway" class="sbName">AWAY</div>
+            <div id="scoreAway" class="sbScore">0</div>
+          </div>
+        </div>
+
+        <div id="metaLine" class="meta"></div>
+
+        <!-- Period buttons -->
+        <div id="periodButtons" class="periodRow"></div>
+
+        <!-- Timer -->
+        <div class="timerWrap">
+          <div id="timerBox" class="timer idle">00:00</div>
+          <div id="timerHint" class="hint"></div>
+        </div>
+
+        <div class="grid2">
+          <button id="btnPlay" class="btn play big">▶ PLAY</button>
+          <button id="btnReset" class="btn reset big">⟲ RESET</button>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Event buttons (big, 2 rows) -->
+        <div class="eventsGrid">
+          <button class="eventBtn evBig" data-ev="GOL_FATTO" type="button">
+            <div class="evIcon">⚽</div><div class="evTxt">GOL FATTO</div>
+          </button>
+
+          <button class="eventBtn evBig" data-ev="GOL_SUBITO" type="button">
+            <div class="evIcon">❌</div><div class="evTxt">GOL SUBITO</div>
+          </button>
+
+          <button class="eventBtn evBig" data-ev="TIRO" type="button">
+            <div class="evIcon">🎯</div><div class="evTxt">TIRO</div>
+          </button>
+
+          <button class="eventBtn evBig" data-ev="AMMONIZIONE" type="button">
+            <div class="evIcon">🟨</div><div class="evTxt">AMMONIZIONE</div>
+          </button>
+
+          <button class="eventBtn evBig" data-ev="ESPULSIONE" type="button">
+            <div class="evIcon">🟥</div><div class="evTxt">ESPULSIONE</div>
+          </button>
+
+          <button class="eventBtn evBig" data-ev="SOSTITUZIONE" type="button">
+            <div class="evIcon">🔁</div><div class="evTxt">SOSTITUZIONE</div>
+          </button>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Events list -->
+        <h2 class="h2">Eventi</h2>
+        <div id="eventsList" class="eventsList"></div>
+
+        <div class="spacer"></div>
+
+        <button id="btnGoClose" class="btn danger big">✅ Vai a Chiusura Referto</button>
+      </div>
+    </section>
+
+    <!-- CLOSE -->
+    <section id="view-close" class="view hidden">
+      <div class="card">
+        <div class="rowBetween">
+          <button id="btnBackClose" class="btn ghost">← Torna a Vista Precedente</button>
+        </div>
+
+        <h1 class="h1">Referto Chiusura</h1>
+
+        <!-- Scoreboard -->
+        <div class="scoreboard">
+          <div class="sbTeam">
+            <div id="teamHomeClose" class="sbName">HOME</div>
+            <div id="scoreHomeClose" class="sbScore">0</div>
+          </div>
+          <div class="sbMid">—</div>
+          <div class="sbTeam">
+            <div id="teamAwayClose" class="sbName">AWAY</div>
+            <div id="scoreAwayClose" class="sbScore">0</div>
+          </div>
+        </div>
+
+        <div id="metaLineClose" class="meta"></div>
+
+        <label class="label">Voto (1–5, anche 2.5)</label>
+        <input id="matchVote" class="input" type="number" step="0.5" min="1" max="5" placeholder="Es. 3.5" />
+
+        <label class="label">Note</label>
+        <textarea id="matchNotes" class="input" rows="4" placeholder="Note libere..."></textarea>
+
+        <div class="spacer"></div>
+
+        <button id="btnCloseMatch" class="btn danger big">🚨 Chiudi Referto</button>
+      </div>
+    </section>
+
+    <!-- EXPORT -->
+    <section id="view-export" class="view hidden">
+      <div class="card">
+        <div class="rowBetween">
+          <button id="btnBackExport" class="btn ghost">← Torna a Vista Precedente</button>
+        </div>
+
+        <h1 class="h1">Referto Export</h1>
+
+        <div class="exportActions">
+          <button id="btnDownloadPDF" class="btn primary big">📄 Esporta PDF</button>
+          <button id="btnCopyWhatsApp" class="btn primary big">📲 Copia WhatsApp</button>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Drive status (resta, bottone tolto) -->
+        <div class="driveBox">
+          <div id="driveLine" class="driveLine">Caricamento su GoogleDrive – In attesa…</div>
+          <div id="archiveStatus" class="driveSub"></div>
+        </div>
+
+        <label class="label">Anteprima WhatsApp</label>
+        <textarea id="waPreview" class="input" rows="6" readonly></textarea>
+
+        <div class="spacer"></div>
+
+        <button id="btnRestart" class="btn ghost big full">↩ Ricomincia</button>
+
+        <!-- logo solo qui + login (come volevi) -->
+        <div class="exportLogoWrap">
+          <img class="exportLogo" src="logo.png" alt="AG" />
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- MODAL -->
+  <div id="modalOverlay" class="modalOverlay hidden" aria-hidden="true">
+    <div class="modalCard" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modalHead">
+        <div id="modalTitle" class="modalTitle">Titolo</div>
+        <button id="modalX" class="modalX" aria-label="Chiudi">✕</button>
+      </div>
+
+      <div id="modalMsg" class="modalMsg"></div>
+
+      <div id="modalForm" class="modalForm hidden">
+        <div class="grid2">
+          <div>
+            <label class="label">Tempo</label>
+            <input id="mPeriod" class="input" type="number" min="1" />
+          </div>
+          <div>
+            <label class="label">Minuto</label>
+            <input id="mMin" class="input" type="number" min="1" />
+          </div>
+        </div>
+
+        <div id="mP1Wrap" class="hidden">
+          <label id="mP1Label" class="label">Giocatore</label>
+          <input id="mP1" class="input" type="text" autocomplete="off" />
+        </div>
+
+        <div id="mP2Wrap" class="hidden">
+          <label id="mP2Label" class="label">Giocatore 2</label>
+          <input id="mP2" class="input" type="text" autocomplete="off" />
+        </div>
+
+        <div id="mAssistWrap" class="hidden">
+          <label class="label">Assist (opzionale)</label>
+          <input id="mAssist" class="input" type="text" autocomplete="off" />
+        </div>
+      </div>
+
+      <div id="modalErr" class="modalErr hidden"></div>
+
+      <div class="modalBtns">
+        <button id="modalCancel" class="btn cancel big">Annulla</button>
+        <button id="modalOk" class="btn confirm big">Conferma</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
