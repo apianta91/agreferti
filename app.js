@@ -166,7 +166,7 @@ function getSelectedPeriodMin(){
 // Score helpers
 // ======================
 function altoLabel(match){
-  return `Alto Garda (${match.team})`;
+  return `Alto Garda ${match.team}`;
 }
 function computeGoals(match){
   const gf = match.events.filter(e=>e.type==="GOL_FATTO").length;
