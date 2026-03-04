@@ -1113,6 +1113,7 @@ function escapeHtml(s){
 // DRIVE UPLOAD (no-cors)
 // ======================
 async function uploadMatchToDrive(force=false){
+
   const sess = getCurrentSession();
   const m = sess?.currentMatch;
   if (!m) return;
@@ -1129,28 +1130,40 @@ async function uploadMatchToDrive(force=false){
   saveState();
   refreshExportUI();
 
-  const url = `${ARCHIVE_ENDPOINT}?token=${encodeURIComponent(ARCHIVE_TOKEN)}`;
+  try{
 
-  try {
-    const resp = await fetch(url,{
+    const html = buildPrintableHTML(m);
+
+    const fileName =
+      `${m.date}_${m.time.replace(":","")}_${m.team}_vs_${m.opponent}.pdf`
+      .replaceAll(" ","_");
+
+    const payload = {
+      token: ARCHIVE_TOKEN,
+      html: html,
+      fileName: fileName
+    };
+
+    const resp = await fetch(ARCHIVE_ENDPOINT,{
       method:"POST",
       headers:{
         "Content-Type":"text/plain;charset=UTF-8"
       },
-      body: JSON.stringify({match:m})
+      body: JSON.stringify(payload)
     });
 
-    const out = await resp.json();
+    const text = await resp.text();
+    const out = JSON.parse(text);
 
-    if(out.status==="success"){
+    if(out.ok){
       m.archive.status="done";
-      m.archive.fileName=out.name || "Referto salvato";
+      m.archive.fileName=out.fileName || fileName;
     }else{
       m.archive.status="error";
-      m.archive.error=out.message || "Errore upload";
+      m.archive.error=out.error || "Errore upload";
     }
 
-  } catch(err){
+  }catch(err){
     m.archive.status="error";
     m.archive.error=String(err?.message || err);
   }
