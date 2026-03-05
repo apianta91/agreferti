@@ -1114,7 +1114,7 @@ function buildPrintableHTML(m){
     </tr>`;
   }).join("");
 
-  const logoPath = "https://raw.githubusercontent.com/apianta91/agreferti/main/logo.png";
+  const logoPath = "https://apianta91.github.io/agreferti/logo.png";
 
   const resultsBlock = (m.periods <= 2)
     ? `
