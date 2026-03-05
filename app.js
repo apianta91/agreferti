@@ -121,8 +121,6 @@ function soundEnd(){              // fine tempo: triplo "pip" più alto
   setTimeout(()=> playTone(980, 140, 0.12), 360);
 }
 
-}
-
 
 function setBodyBg(kind){
   document.body.classList.toggle("bg-login", kind === "login");
