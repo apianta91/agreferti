@@ -54,6 +54,42 @@ function showBanner(msg){
   setTimeout(()=> b.classList.add("hidden"), 2200);
 }
 
+
+function showToast(msg){
+  let t = $("toast");
+  if (!t){
+    t = document.createElement("div");
+    t.id = "toast";
+    t.className = "toast";
+    document.body.appendChild(t);
+  }
+  t.textContent = String(msg || "");
+  t.classList.add("show");
+  clearTimeout(showToast._t);
+  showToast._t = setTimeout(()=> t.classList.remove("show"), 1500);
+}
+
+function vibrate(pattern){
+  try{ if (navigator.vibrate) navigator.vibrate(pattern); }catch(_){}
+}
+
+let _audioCtx = null;
+function playBeep(){
+  try{
+    if (!_audioCtx) _audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if (_audioCtx.state === "suspended") _audioCtx.resume();
+    const o = _audioCtx.createOscillator();
+    const g = _audioCtx.createGain();
+    o.type = "sine";
+    o.frequency.value = 880;
+    g.gain.value = 0.08;
+    o.connect(g); g.connect(_audioCtx.destination);
+    o.start();
+    setTimeout(()=>{ try{o.stop();}catch(_){} }, 220);
+  }catch(_){}
+}
+
+
 function setBodyBg(kind){
   document.body.classList.toggle("bg-login", kind === "login");
   document.body.classList.toggle("bg-royal", kind === "royal");
@@ -728,6 +764,24 @@ function refreshLiveUI(){
     const elapsed = computeElapsedSec(m);
     const remaining = computeRemainingSec(m);
 
+    // ===== Avvisi (una sola volta per tempo) =====
+    if (!m.alerts) m.alerts = {};
+    const k30 = `p${m.currentPeriod}_30`;
+    const kDone = `p${m.currentPeriod}_done`;
+
+    if (!done && remaining <= 30 && remaining >= 0 && !m.alerts[k30]){
+      vibrate([120,80,120]); // 30 secondi
+      m.alerts[k30] = true;
+      saveState();
+    }
+    if (done && !m.alerts[kDone]){
+      vibrate([200,100,200,100,200]); // scaduto
+      playBeep();
+      m.alerts[kDone] = true;
+      saveState();
+    }
+
+
     if (done){
       box.className = "timer done blink";
       box.textContent = formatMMSS(m.periodMin*60);
@@ -740,6 +794,27 @@ function refreshLiveUI(){
       btnReset.textContent = "⟲ RESET";
     }
   }
+
+
+  // ===== Badges conteggio eventi =====
+  const evs = (m.events || []);
+  const ammCount = evs.filter(e=>e.type==="AMMONIZIONE").length;
+  const espCount = evs.filter(e=>e.type==="ESPULSIONE").length;
+  const subCount = evs.filter(e=>e.type==="SOSTITUZIONE").length;
+
+  const setBadge = (id, n)=>{
+    const el = $(id);
+    if (!el) return;
+    if (n > 0){
+      el.textContent = String(n);
+      el.classList.remove("hidden");
+    } else {
+      el.classList.add("hidden");
+    }
+  };
+  setBadge("ammBadge", ammCount);
+  setBadge("espBadge", espCount);
+  setBadge("subBadge", subCount);
 
   renderEventsList(m, $("eventsList"));
 }
@@ -929,7 +1004,7 @@ function refreshExportUI(){
 async function onCopyWhatsApp(){
   try{
     await navigator.clipboard.writeText($("waPreview").value);
-    showBanner("COPIATO");
+    showToast("Copiato");
   } catch {
     await showMessage("Errore","Copia non riuscita");
   }
