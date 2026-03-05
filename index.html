@@ -5,154 +5,141 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <title>AG Referti</title>
 
-  <!-- iPhone Home Screen icon -->
-  <link rel="apple-touch-icon" href="ag-referti-180.png">
-  <link rel="icon" type="image/png" href="ag-referti-180.png">
+  <link rel="apple-touch-icon" href="ag-referti-pastel-180.png">
+  <link rel="icon" type="image/png" href="ag-referti-pastel-180.png">
+  <link rel="manifest" href="manifest.json" />
+
+  <meta name="theme-color" content="#0B2FA6" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-
-  <!-- Android / PWA -->
-  <link rel="manifest" href="manifest.json" />
-  <meta name="theme-color" content="#0B2FA6" />
-
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" href="logo.png" />
 
   <link rel="stylesheet" href="style.css" />
 </head>
 <body class="bg-login">
-  <!-- Top bar -->
-  <header class="topbar">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
     <div class="topbarInner">
-      <img id="clubLogo" class="topLogo" src="logo.png" alt="AG" />
-      <div id="pageTitle" class="topTitle">LOGIN</div>
+      <img id="topLogo" class="topLogo" src="logo.png" alt="AG" />
+      <div id="topTitle" class="topTitle">LOGIN</div>
       <div class="topSpacer"></div>
     </div>
-  </header>
+  </div>
 
-  <!-- Banner -->
   <div id="banner" class="banner hidden"></div>
 
-  <main class="wrap">
+  <div class="wrap">
+
     <!-- LOGIN -->
-    <section id="view-login" class="view">
-      <div class="card cardLogin center">
+    <section id="viewLogin" class="view">
+      <div class="card cardLogin">
+        <div class="h2">Login</div>
+
         <label class="label">Squadra</label>
-        <select id="teamSelect" class="input"></select>
+        <select id="loginTeam" class="input"></select>
 
         <label class="label">Password</label>
-        <input id="passwordInput" class="input" type="password" inputmode="text" autocomplete="off" autocapitalize="off" spellcheck="false" />
+        <input id="loginPass" class="input" type="password" autocomplete="off" />
 
-        <div class="row centerRow">
-          <label class="check">
-            <input id="rememberPw" type="checkbox" />
-            <span>Ricorda password</span>
-          </label>
+        <div class="spacer"></div>
+        <button id="btnLogin" class="btn big full primary">🔐 Apri Partita</button>
+      </div>
+    </section>
+
+    <!-- IMPOSTAZIONI MATCH -->
+    <section id="viewSetup" class="view hidden">
+      <div class="card">
+        <div class="h2">Impostazioni del Match</div>
+
+        <div class="grid2">
+          <div class="col">
+            <label class="label">Squadra</label>
+            <select id="team" class="input"></select>
+          </div>
+          <div class="col">
+            <label class="label">Modalità</label>
+            <select id="mode" class="input"></select>
+          </div>
+        </div>
+
+        <label class="label">Avversario</label>
+        <input id="opponentRaw" class="input" placeholder="Es: Real Madrid" />
+
+        <div class="spacer"></div>
+
+        <div class="seg">
+          <button id="btnCasa" class="segBtn" type="button">In casa</button>
+          <button id="btnTrasferta" class="segBtn" type="button">In trasferta</button>
         </div>
 
         <div class="spacer"></div>
 
-        <button id="btnLogin" class="btn primary big full">🔐 Apri Partita</button>
-      </div>
-    </section>
-
-    <!-- SETTINGS -->
-    <section id="view-settings" class="view hidden">
-      <div class="card center">
-        <label class="label">Squadra</label>
-        <select id="setTeam" class="input"></select>
-
-        <label class="label">Avversario</label>
-        <input id="setOpponent" class="input" type="text" placeholder="Es. Real Madrid" />
-
-        <label class="label">Casa / Trasferta</label>
-        <div class="seg">
-          <button id="venueCasa" class="segBtn active" type="button">Casa</button>
-          <button id="venueTrasferta" class="segBtn" type="button">Trasferta</button>
+        <div class="grid2">
+          <div class="col">
+            <label class="label">Data partita</label>
+            <input id="date" class="input" type="date" />
+          </div>
+          <div class="col">
+            <label class="label">Ora partita</label>
+            <input id="time" class="input" type="time" />
+          </div>
         </div>
+
+        <div class="spacer"></div>
 
         <div class="grid2">
           <div class="col">
-            <label class="label">Data</label>
-            <input id="setDate" class="input" type="date" />
+            <label class="label">Numero tempi</label>
+            <select id="periods" class="input"></select>
           </div>
           <div class="col">
-            <label class="label">Ora</label>
-            <input id="setTime" class="input" type="time" />
+            <label class="label">Durata tempi (min)</label>
+            <select id="periodMin" class="input"></select>
           </div>
-        </div>
-
-        <div class="grid2">
-          <div class="col">
-            <label class="label">Modalità di Gioco</label>
-            <select id="setMode" class="input">
-              <option>5v5</option>
-              <option>7v7</option>
-              <option>9v9</option>
-              <option>11v11</option>
-            </select>
-          </div>
-          <div class="col">
-            <label class="label">Numero Tempi</label>
-            <select id="setPeriods" class="input">
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4">4</option>
-            </select>
-          </div>
-        </div>
-
-        <label class="label">Durata Tempi (min)</label>
-        <select id="setPeriodMin" class="input">
-          <option value="15">15</option>
-          <option value="20">20</option>
-          <option value="35">35</option>
-          <option value="40">40</option>
-          <option value="45">45</option>
-          <option value="custom">Custom</option>
-        </select>
-
-        <div id="customMinWrap" class="hidden">
-          <label class="label">Inserisci la durata dei tempi</label>
-          <input id="setPeriodCustom" class="input" type="number" min="1" placeholder="Es. 12" />
         </div>
 
         <div class="spacer"></div>
 
         <div class="actionRow">
-          <button id="btnBackSettings" class="btn ghost big actionLeft">← BACK</button>
-          <button id="btnOpenMatch" class="btn primary big actionRight">📝 Apri Referto</button>
+          <div class="actionLeft">
+            <button id="btnBackSetup" class="btn full ghost" type="button">BACK</button>
+          </div>
+          <div class="actionRight">
+            <button id="btnOpenLive" class="btn big full primary" type="button">📝 Apri Referto</button>
+          </div>
         </div>
       </div>
     </section>
 
     <!-- LIVE -->
-    <section id="view-live" class="view hidden">
-      <div class="card center">
+    <section id="viewLive" class="view hidden">
+      <div class="card">
+        <div class="h2">Referto Live</div>
+
         <div class="scoreboard">
           <div class="sbTeam">
-            <div id="teamHome" class="sbName">HOME</div>
+            <div id="teamHome" class="sbName">ALTO GARDA</div>
             <div id="scoreHome" class="sbScore">0</div>
           </div>
-          <div class="sbMid">—</div>
+          <div class="sbMid">-</div>
           <div class="sbTeam">
-            <div id="teamAway" class="sbName">AWAY</div>
+            <div id="teamAway" class="sbName">AVVERSARIO</div>
             <div id="scoreAway" class="sbScore">0</div>
           </div>
         </div>
 
-        <div id="metaLine" class="meta"></div>
+        <div id="meta" class="meta"></div>
 
-        <div id="periodButtons" class="periodRow"></div>
+        <div id="periodRow" class="periodRow"></div>
 
         <div class="timerWrap">
           <div id="timerBox" class="timer idle">00:00</div>
           <div id="timerHint" class="hint"></div>
         </div>
 
-        <div class="grid2">
-          <button id="btnPlay" class="btn play big full">▶ PLAY</button>
-          <button id="btnReset" class="btn reset big full">⟲ RESET</button>
+        <div class="row">
+          <button id="btnPlay" class="btn play">▶ PLAY</button>
+          <button id="btnReset" class="btn reset">⟲ RESET</button>
         </div>
 
         <div class="divider"></div>
@@ -168,10 +155,12 @@
 
           <button class="eventBtn evBig" data-ev="AMMONIZIONE" type="button">
             <div class="evIcon">🟨</div><div class="evTxt">AMMONIZIONE</div>
+            <span id="ammBadge" class="badge badge-yellow hidden">0</span>
           </button>
 
           <button class="eventBtn evBig" data-ev="ESPULSIONE" type="button">
             <div class="evIcon">🟥</div><div class="evTxt">ESPULSIONE</div>
+            <span id="espBadge" class="badge badge-red hidden">0</span>
           </button>
 
           <button class="eventBtn evBig" data-ev="TIRO" type="button">
@@ -180,9 +169,10 @@
 
           <button class="eventBtn evBig" data-ev="SOSTITUZIONE" type="button">
             <div class="evIcon">🔁</div><div class="evTxt">SOSTITUZIONE</div>
+            <span id="subBadge" class="badge badge-blue hidden">0</span>
           </button>
         </div>
-        
+
         <div class="divider"></div>
 
         <div class="h2">Eventi</div>
@@ -191,58 +181,73 @@
         <div class="spacer"></div>
 
         <div class="actionRow">
-          <button id="btnBackLive" class="btn ghost big actionLeft">← BACK</button>
-          <button id="btnGoClose" class="btn danger big actionRight">✅ Chiusura Referto</button>
+          <div class="actionLeft">
+            <button id="btnBackLive" class="btn full ghost" type="button">BACK</button>
+          </div>
+          <div class="actionRight">
+            <button id="btnGoClose" class="btn big full danger" type="button">🏁 Vai a Chiusura</button>
+          </div>
         </div>
+
       </div>
     </section>
 
-    <!-- CLOSE -->
-    <section id="view-close" class="view hidden">
-      <div class="card center">
+    <!-- CHIUSURA -->
+    <section id="viewClose" class="view hidden">
+      <div class="card">
+        <div class="h2">Referto Chiusura</div>
+
         <div class="scoreboard">
           <div class="sbTeam">
-            <div id="teamHomeClose" class="sbName">HOME</div>
-            <div id="scoreHomeClose" class="sbScore">0</div>
+            <div id="teamHome2" class="sbName">ALTO GARDA</div>
+            <div id="scoreHome2" class="sbScore">0</div>
           </div>
-          <div class="sbMid">—</div>
+          <div class="sbMid">-</div>
           <div class="sbTeam">
-            <div id="teamAwayClose" class="sbName">AWAY</div>
-            <div id="scoreAwayClose" class="sbScore">0</div>
+            <div id="teamAway2" class="sbName">AVVERSARIO</div>
+            <div id="scoreAway2" class="sbScore">0</div>
           </div>
         </div>
 
-        <div id="metaLineClose" class="meta"></div>
+        <div class="spacer"></div>
 
-        <label class="label">Voto (1–5, anche 2.5)</label>
-        <input id="matchVote" class="input" type="number" step="0.5" min="1" max="5" placeholder="Es. 3.5" />
+        <label class="label">Voto (obbligatorio)</label>
+        <input id="vote" class="input" inputmode="decimal" placeholder="Es: 3.5" />
 
         <label class="label">Note</label>
-        <textarea id="matchNotes" class="input" rows="4" placeholder="Note libere..."></textarea>
+        <textarea id="notes" class="input" rows="4" placeholder="Note libere..."></textarea>
 
         <div class="spacer"></div>
 
         <div class="actionRow">
-          <button id="btnBackClose" class="btn ghost big actionLeft">← BACK</button>
-          <button id="btnCloseMatch" class="btn danger big actionRight">🚨 Chiudi Referto</button>
+          <div class="actionLeft">
+            <button id="btnBackClose" class="btn full ghost" type="button">BACK</button>
+          </div>
+          <div class="actionRight">
+            <button id="btnCloseMatch" class="btn big full danger" type="button">✅ Chiudi Referto</button>
+          </div>
         </div>
       </div>
     </section>
 
     <!-- EXPORT -->
-    <section id="view-export" class="view hidden">
-      <div class="card center">
-        <div class="exportActions">
-          <button id="btnDownloadPDF" class="btn primary big full">📄 Esporta PDF</button>
-          <button id="btnCopyWhatsApp" class="btn primary big full">📲 Copia WhatsApp</button>
-        </div>
-
-        <div class="divider"></div>
+    <section id="viewExport" class="view hidden">
+      <div class="card">
+        <div class="h2">Referto Export</div>
 
         <div class="driveBox">
-          <div id="driveLine" class="driveLine">Caricamento su GoogleDrive – In attesa…</div>
-          <div id="archiveStatus" class="driveSub"></div>
+          <div id="driveLine" class="driveLine">Caricamento su GoogleDrive – In attesa</div>
+          <div id="driveSub" class="driveSub"></div>
         </div>
+
+        <div class="spacer"></div>
+
+        <div class="exportActions">
+          <button id="btnPdf" class="btn big full primary" type="button">📄 Esporta PDF</button>
+          <button id="btnCopyWa" class="btn big full primary" type="button">📲 Copia WhatsApp</button>
+        </div>
+
+        <div class="spacer"></div>
 
         <label class="label">Anteprima WhatsApp</label>
         <textarea id="waPreview" class="input" rows="6" readonly></textarea>
@@ -250,61 +255,34 @@
         <div class="spacer"></div>
 
         <div class="actionRow">
-          <button id="btnBackExport" class="btn ghost big actionLeft">← BACK</button>
-          <button id="btnRestart" class="btn ghost big actionRight">↩ Ricomincia</button>
+          <div class="actionLeft">
+            <button id="btnBackExport" class="btn full ghost" type="button">BACK</button>
+          </div>
+          <div class="actionRight">
+            <button id="btnRestart" class="btn big full primary" type="button">🔁 Ricomincia</button>
+          </div>
         </div>
 
         <div class="exportLogoWrap">
           <img class="exportLogo" src="logo.png" alt="AG" />
         </div>
+
       </div>
     </section>
-  </main>
+
+  </div>
 
   <!-- MODAL -->
-  <div id="modalOverlay" class="modalOverlay hidden" aria-hidden="true">
-    <div class="modalCard" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div id="modalOverlay" class="modalOverlay hidden">
+    <div class="modalCard">
       <div class="modalHead">
         <div id="modalTitle" class="modalTitle">Titolo</div>
-        <button id="modalX" class="modalX" aria-label="Chiudi">✕</button>
+        <button id="modalX" class="modalX" type="button">✕</button>
       </div>
-
       <div id="modalMsg" class="modalMsg"></div>
-
-      <div id="modalForm" class="modalForm hidden">
-        <div class="grid2">
-          <div class="col">
-            <label class="label">Tempo</label>
-            <input id="mPeriod" class="input" type="number" min="1" />
-          </div>
-          <div class="col">
-            <label class="label">Minuto</label>
-            <input id="mMin" class="input" type="number" min="1" />
-          </div>
-        </div>
-
-        <div id="mP1Wrap" class="hidden">
-          <label id="mP1Label" class="label">Giocatore</label>
-          <input id="mP1" class="input" type="text" autocomplete="off" />
-        </div>
-
-        <div id="mP2Wrap" class="hidden">
-          <label id="mP2Label" class="label">Giocatore 2</label>
-          <input id="mP2" class="input" type="text" autocomplete="off" />
-        </div>
-
-        <div id="mAssistWrap" class="hidden">
-          <label class="label">Assist (opzionale)</label>
-          <input id="mAssist" class="input" type="text" autocomplete="off" />
-        </div>
-      </div>
-
+      <div id="modalForm" class="modalForm"></div>
       <div id="modalErr" class="modalErr hidden"></div>
-
-      <div class="modalBtns">
-        <button id="modalCancel" class="btn cancel big">Annulla</button>
-        <button id="modalOk" class="btn confirm big">Conferma</button>
-      </div>
+      <div id="modalBtns" class="modalBtns"></div>
     </div>
   </div>
 
