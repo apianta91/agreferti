@@ -24,9 +24,11 @@ body{
   text-rendering: optimizeLegibility;
 }
 
+/* background */
 .bg-login{ background:#f4f6fb; color:var(--text); }
 .bg-royal{ background:linear-gradient(180deg,var(--royal),var(--royal2)); color:var(--textOnBlue); }
 
+/* ✅ notch safe area */
 .topbar{
   position:sticky; top:0; z-index:10;
   padding: calc(12px + env(safe-area-inset-top)) 14px 12px;
@@ -75,7 +77,7 @@ body{
   border-radius: var(--radius);
   padding: 16px;
   box-shadow: var(--shadow);
-  text-align:center;
+  text-align:center; /* ✅ tutto centrato */
 }
 .bg-royal .card{
   background:linear-gradient(180deg,var(--card),var(--card2));
@@ -87,6 +89,7 @@ body{
 }
 .cardLogin{ padding:18px; }
 
+/* ✅ label centrate */
 .label{
   display:block;
   margin: 10px 0 6px;
@@ -97,6 +100,7 @@ body{
   text-align:center;
 }
 
+/* ✅ input centrati + fix iOS date/time */
 .input{
   width:100%;
   max-width:100%;
@@ -106,7 +110,7 @@ body{
   border: 1px solid rgba(0,0,0,.10);
   outline:none;
   display:block;
-  text-align:center;
+  text-align:center; /* ✅ testo centrato */
 }
 
 input[type="date"].input,
@@ -126,6 +130,7 @@ input[type="time"].input{
 .bg-royal .input::placeholder{ color: rgba(234,241,255,.60); }
 .bg-login .input{ background:white; }
 
+/* textarea: meglio leggibile a sinistra (ma box centrata) */
 textarea.input{
   resize: vertical;
   text-align:left;
@@ -312,6 +317,7 @@ textarea.input{
 
 .eventsList{ display:flex; flex-direction:column; gap:8px; }
 
+/* ✅ eventi centrati */
 .eventRow{
   display:grid;
   grid-template-columns: 118px 8px 1fr 92px;
@@ -321,7 +327,7 @@ textarea.input{
   border-radius: 16px;
   background: rgba(0,0,0,.10);
   border:1px solid rgba(255,255,255,.10);
-  text-align:center;
+  text-align:center; /* ✅ */
 }
 @media (max-width:420px){
   .eventRow{ grid-template-columns: 110px 6px 1fr 84px; }
@@ -375,7 +381,7 @@ textarea.input{
 .evActions{
   display:flex;
   gap:8px;
-  justify-content:center;
+  justify-content:center; /* ✅ */
   flex-wrap:wrap;
 }
 .actionLink{
@@ -426,6 +432,7 @@ textarea.input{
   .actionLeft{ flex: 0 0 42%; }
 }
 
+/* Modal centrata */
 .modalOverlay{
   position:fixed; inset:0;
   background: rgba(0,0,0,.45);
@@ -443,7 +450,7 @@ textarea.input{
   background: #0B2FA6;
   border:1px solid rgba(255,255,255,.16);
   color: var(--textOnBlue);
-  text-align:center;
+  text-align:center; /* ✅ */
 }
 .modalHead{
   display:flex; align-items:center; justify-content:space-between; gap:10px;
@@ -480,6 +487,7 @@ textarea.input{
   gap:12px;
   margin-top:12px;
 }
+
 
 /* ===== Badges (notifiche) ===== */
 .evBadgeWrap{ position:relative; }
