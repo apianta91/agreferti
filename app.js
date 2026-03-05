@@ -74,19 +74,53 @@ function vibrate(pattern){
 }
 
 let _audioCtx = null;
-function playBeep(){
+let _audioUnlocked = false;
+
+function ensureAudioUnlocked(){
   try{
     if (!_audioCtx) _audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     if (_audioCtx.state === "suspended") _audioCtx.resume();
+    if (_audioUnlocked) return;
+    // tiny silent click to unlock on iOS after a user gesture
+    const o = _audioCtx.createOscillator();
+    const g = _audioCtx.createGain();
+    g.gain.value = 0.0001;
+    o.frequency.value = 440;
+    o.connect(g); g.connect(_audioCtx.destination);
+    o.start();
+    setTimeout(()=>{ try{o.stop();}catch(_){} }, 40);
+    _audioUnlocked = true;
+  }catch(_){}
+}
+
+function playTone(freq, ms, vol=0.09){
+  try{
+    ensureAudioUnlocked();
     const o = _audioCtx.createOscillator();
     const g = _audioCtx.createGain();
     o.type = "sine";
-    o.frequency.value = 880;
-    g.gain.value = 0.08;
+    o.frequency.value = freq;
+    g.gain.value = vol;
     o.connect(g); g.connect(_audioCtx.destination);
     o.start();
-    setTimeout(()=>{ try{o.stop();}catch(_){} }, 220);
+    setTimeout(()=>{ try{o.stop();}catch(_){} }, ms);
   }catch(_){}
+}
+
+// 3 suoni diversi
+function soundStart(){            // partenza tempo: tono basso corto
+  playTone(520, 120, 0.10);
+}
+function soundWarn30(){           // 30 secondi: doppio "pip"
+  playTone(740, 110, 0.11);
+  setTimeout(()=> playTone(740, 110, 0.11), 160);
+}
+function soundEnd(){              // fine tempo: triplo "pip" più alto
+  playTone(980, 140, 0.12);
+  setTimeout(()=> playTone(980, 140, 0.12), 180);
+  setTimeout(()=> playTone(980, 140, 0.12), 360);
+}
+
 }
 
 
@@ -180,6 +214,16 @@ function setVenue(v){
   venueValue = v;
   $("venueCasa").classList.toggle("active", v === "Casa");
   $("venueTrasferta").classList.toggle("active", v === "Trasferta");
+}
+
+let alertsEnabledValue = true;
+
+function setAlerts(on){
+  alertsEnabledValue = !!on;
+  const onBtn = $("alertsOn");
+  const offBtn = $("alertsOff");
+  if (onBtn) onBtn.classList.toggle("active", alertsEnabledValue);
+  if (offBtn) offBtn.classList.toggle("active", !alertsEnabledValue);
 }
 
 // ======================
@@ -458,6 +502,7 @@ function loadSettingsUIFromDefaults(){
 
   $("setOpponent").value = "";
   setVenue("Casa");
+  setAlerts(true);
 }
 
 function route(){
@@ -549,6 +594,7 @@ async function onOpenMatch(){
     currentPeriod: 1,
     startMs: null,
     running: false,
+    alertsEnabled: alertsEnabledValue,
     events: [],
     vote: null,
     notes: "",
@@ -566,6 +612,11 @@ function onPlay(){
   const m = sess?.currentMatch;
   if (!m) return;
   if (m.running) return;
+  ensureAudioUnlocked();
+  if (m.alertsEnabled !== false){
+    soundStart();
+    vibrate([60]);
+  }
   m.startMs = nowMs();
   m.running = true;
   saveState();
@@ -770,13 +821,14 @@ function refreshLiveUI(){
     const kDone = `p${m.currentPeriod}_done`;
 
     if (!done && remaining <= 30 && remaining >= 0 && !m.alerts[k30]){
-      vibrate([120,80,120]); // 30 secondi
+      vibrate([120,80,120]); // 30 secondi (iPhone potrebbe ignorare)
+      soundWarn30();
       m.alerts[k30] = true;
       saveState();
     }
     if (done && !m.alerts[kDone]){
-      vibrate([200,100,200,100,200]); // scaduto
-      playBeep();
+      vibrate([200,100,200,100,200]); // scaduto (iPhone potrebbe ignorare)
+      soundEnd();
       m.alerts[kDone] = true;
       saveState();
     }
@@ -1328,6 +1380,7 @@ function stopTicker(){
 // INIT
 // ======================
 function init(){
+  document.addEventListener("pointerdown", ()=>ensureAudioUnlocked(), { once:true });
   fillSelect($("teamSelect"), TEAMS);
   fillSelect($("setTeam"), TEAMS);
 
@@ -1345,6 +1398,9 @@ function init(){
 
   $("venueCasa").addEventListener("click", ()=> setVenue("Casa"));
   $("venueTrasferta").addEventListener("click", ()=> setVenue("Trasferta"));
+
+  $("alertsOn").addEventListener("click", ()=> setAlerts(true));
+  $("alertsOff").addEventListener("click", ()=> setAlerts(false));
 
   $("btnPlay").addEventListener("click", onPlay);
   $("btnReset").addEventListener("click", onResetClicked);
